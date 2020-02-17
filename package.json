@@ -1,0 +1,22 @@
+{
+  "name": "auto-git-update",
+  "version": "1.0.0",
+  "description": "Update node app from git repo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chegele/AutoGitUpdate.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chegele/AutoGitUpdate/issues"
+  },
+  "homepage": "https://github.com/chegele/AutoGitUpdate#readme",
+  "dependencies": {
+    "logger": "git+https://github.com/chegele/Logger.git"
+  }
+}
