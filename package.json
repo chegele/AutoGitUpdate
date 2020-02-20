@@ -1,8 +1,9 @@
 {
   "name": "auto-git-update",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Update node app from git repo.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +18,9 @@
   },
   "homepage": "https://github.com/chegele/AutoGitUpdate#readme",
   "dependencies": {
-    "logger": "git+https://github.com/chegele/Logger.git"
+    "app-root-path": "^3.0.0",
+    "fs-extra": "^8.1.0",
+    "simple-git": "^1.131.0",
+    "simple-logger": "git+https://github.com/chegele/Logger.git"
   }
 }
