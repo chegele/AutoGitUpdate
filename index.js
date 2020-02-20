@@ -46,7 +46,7 @@ export default class AutoGitUpdate {
         if (updateConfig == undefined) throw new Error('You must pass a config object to AutoGitUpdate.');
         if (updateConfig.repository == undefined) throw new Error('You must include a repository link.');
         if (updateConfig.branch == undefined) updateConfig.branch = 'master';
-        if (updateConfig.tempLocation == undefined) throw new Error('You must define a temp location for cloning the repository');4444444444446666
+        if (updateConfig.tempLocation == undefined) throw new Error('You must define a temp location for cloning the repository');
 
         // Validate that Auto Git Update is being used as a dependency or testing is enabled
         // This is to prevent the Auto Git Update module from being overwritten on accident during development
