@@ -33,8 +33,8 @@ let log = new Logger({});
 log.logGeneral = true;
 log.logWarning = true;
 log.logError   = true;
-log.logDetail  = true;
-log.logDebug   = true;
+log.logDetail  = false;
+log.logDebug   = false;
 
 export default class AutoGitUpdate {
     /**
@@ -185,6 +185,7 @@ function installDependencies() {
         child.stderr.on('data', data => {
             if (data.toLowerCase().includes('error')) {
                 // npm passes warnings as errors, only reject if "error" is included
+                data = data.replace(/\r?\n|\r/g, '');
                 log.error('Auto Git Update - Error installing dependencies');
                 log.error('Auto Git Update - ' + data);
                 reject();
