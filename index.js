@@ -183,9 +183,14 @@ function installDependencies() {
         child.stdout.on('end', resolve);
         child.stdout.on('data', data => log.general('Auto Git Update - npm install: ' + data.replace(/\r?\n|\r/g, '')));
         child.stderr.on('data', data => {
-            log.error('Auto Git Update - Error installing dependencies');
-            log.error('Auto Git Update - ' + data);
-            reject();
+            if (data.toLowerCase().includes('error')) {
+                // npm passes warnings as errors, only reject if "error" is included
+                log.error('Auto Git Update - Error installing dependencies');
+                log.error('Auto Git Update - ' + data);
+                reject();
+            }else{
+                log.warning('Auto Git Update - ' + data);
+            }
         });
     });
 }
