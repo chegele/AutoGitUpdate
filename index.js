@@ -250,7 +250,7 @@ async function readRemoteVersion() {
         let version = remotePackage.version;
         return version;
     }catch(err) {
-        if (err = 404) throw new Error('This repository requires a token or does not exist. \n ' + options.url);
+        if (err = 404) throw new Error('This repository requires a token or does not exist. \n ' + url);
         throw err;
     }
 }
@@ -285,8 +285,8 @@ function promiseBlindExecute(command) {
 
 /**
  * A promise wrapper for sending a get https requests.
- * @param {String} url The Https address to request.
- * @param {String} options The request options. 
+ * @param {String} url - The Https address to request.
+ * @param {String} options - The request options. 
  */
 function promiseHttpsRequest(url, options) {
     return new Promise(function(resolve, reject) {
