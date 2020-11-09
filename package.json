@@ -3,7 +3,6 @@
   "version": "1.0.4",
   "description": "Update node app from git repo.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
