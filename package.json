@@ -1,6 +1,6 @@
 {
   "name": "auto-git-update",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Update node app from git repo.",
   "main": "index.js",
   "type": "module",
@@ -19,8 +19,8 @@
   "homepage": "https://github.com/chegele/AutoGitUpdate#readme",
   "dependencies": {
     "app-root-path": "^3.0.0",
+    "chegs-simple-logger": "^1.1.0",
     "fs-extra": "^8.1.0",
-    "simple-git": "^1.131.0",
-    "simple-logger": "git+https://github.com/chegele/Logger.git"
+    "simple-git": "^1.131.0"
   }
 }

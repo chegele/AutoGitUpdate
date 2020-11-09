@@ -5,7 +5,7 @@ import {spawn, exec} from 'child_process';
 import https from 'https';
 import appRootPath from 'app-root-path';
 import git from 'simple-git';
-import Logger from 'simple-logger';
+import Logger from 'chegs-simple-logger';
 
 /** 
  * @typedef Config - Configuration for Auto Git Update
@@ -161,7 +161,7 @@ async function downloadUpdate() {
     log.detail('Auto Git Update - Destination: ' + destination);
     await fs.ensureDir(destination);
     await fs.emptyDir(destination);
-    await promiseClone(repo, destination);
+    await promiseClone(repo, destination, config.branch);
     return true;
 }
 
@@ -259,11 +259,12 @@ async function readRemoteVersion() {
 /**
  * A promise wrapper for the simple-git clone function
  * @param {String} repo - The url of the repository to clone.
- * @param {String} destination - The local path to clone into. 
+ * @param {String} destination - The local path to clone into.
+ * @param {String} branch - The repo branch to clone. 
  */
-function promiseClone(repo, destination) {
+function promiseClone(repo, destination, branch) {
     return new Promise(function(resolve, reject) {
-        git().clone(repo, destination, [], result => {
+        git().clone(repo, destination, [`--branch=${branch}`], result => {
             if (result != null) reject(`Unable to clone repo \n ${repo} \n ${result}`);
             resolve();
         });
