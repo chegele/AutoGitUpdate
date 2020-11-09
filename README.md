@@ -8,7 +8,6 @@ a node.js module used for automatically updating projects from a git repository.
  - To update from private repositories a personal access token needs to be provided. 
  - During updates a backup of the old version is taken and stored in the configured tempLocation.
  - The remote package.json is compared to the local package.json to determine if a different version is available. 
- - Until available on npm, install using github link. [> npm install https://github.com/chegele/AutoGitUpdate].
 
 ### Options
  - **repository** *String* - The url to the root of a git repository to update from.
