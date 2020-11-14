@@ -3,7 +3,9 @@
 a node.js module used for automatically updating projects from a git repository. 
 
 ### Notes
- - This is a ECMAScript module which makes use of import and export statements. 
+ - This module comes in two flavors. ECMAScript & Commonjs.
+ - The default install will be an ECMAScript module which requires use of an import statement. 
+ - __Optionally, install the commonjs module to make use of the more popular require statement.__
  - This module uses simple-logger (https://github.com/chegele/Logger).
  - To update from private repositories a personal access token needs to be provided. 
  - During updates a backup of the old version is taken and stored in the configured tempLocation.
@@ -25,9 +27,32 @@ a node.js module used for automatically updating projects from a git repository.
  - **forceUpdate()** - Updates without comparing package versions.
  - **setLogConfig(logConfig)** - Updates logging configuration. https://github.com/chegele/Logger
 
-### Example
+### ECMAScript Example (default)
+```
+npm i auto-git-update
+```
 ```
 import AutoGitUpdate from 'auto-git-update';
+
+const config = {
+    repository: 'https://github.com/chegele/BackupPurger'
+    tempLocation: 'C:/Users/scheg/Desktop/tmp/',
+    ignoreFiles: ['util/config.js'],
+    executeOnComplete: 'C:\\Users\\scheg\\Desktop\\worksapce\\AutoGitUpdate\\startTest.bat',
+    exitOnComplete: true
+}
+
+const updater = new AutoGitUpdate(config);
+
+updater.autoUpdate();
+```
+
+### CommonJS Example
+```
+npm i auto-git-update@commonjs
+```
+```
+const AutoGitUpdate = require('auto-git-update');
 
 const config = {
     repository: 'https://github.com/chegele/BackupPurger'
