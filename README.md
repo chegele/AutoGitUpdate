@@ -1,6 +1,7 @@
 
 # Auto Git Update
 a node.js module used for automatically updating projects from a git repository. 
+<br><br>
 
 ### Notes
  - This module comes in two flavors. ECMAScript & Commonjs.
@@ -10,8 +11,9 @@ a node.js module used for automatically updating projects from a git repository.
  - To update from private repositories a personal access token needs to be provided. 
  - During updates a backup of the old version is taken and stored in the configured tempLocation.
  - The remote package.json is compared to the local package.json to determine if a different version is available. 
+<br><br>
 
-### Options
+### Config Options
  - **repository** *String* - The url to the root of a git repository to update from.
  - **tempLocation** *String* - The local dir to save temporary information for Auto Git Update.
  - **branch** *String* - [optional] The branch to update from. Defaults to master.
@@ -19,13 +21,15 @@ a node.js module used for automatically updating projects from a git repository.
  - **ignoreFiles** *Array[String]* - [optional] An array of files to not install when updating. Useful for config files. 
  - **executeOnComplete** *String* - [optional] A command to execute after an update completes. Good for restarting the app.
  - **exitOnComplete** *Boolean* - [optional] Use process exit to stop the app after a successful update.
+<br><br>
 
 ### Functions
  - **autoUpdate()** - Updates if local package.json version is different than remote.
  - **compareVersions()** - Compares package.json versions without updating.
-   - Returns an object with the properties *UpToDate*, *currentVersion*, & *remoteVersion*.
+   - Returns an object with the properties *upToDate*, *currentVersion*, & *remoteVersion*.
  - **forceUpdate()** - Updates without comparing package versions.
  - **setLogConfig(logConfig)** - Updates logging configuration. https://github.com/chegele/Logger
+<br><br>
 
 ### ECMAScript Example (default)
 ```
@@ -46,6 +50,7 @@ const updater = new AutoGitUpdate(config);
 
 updater.autoUpdate();
 ```
+<br><br>
 
 ### CommonJS Example
 ```

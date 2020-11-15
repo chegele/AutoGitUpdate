@@ -2,6 +2,7 @@
   "name": "auto-git-update",
   "version": "1.0.5",
   "description": "Update node app from git repo.",
+  "keywords": ["auto", "automatic", "git", "github", "update", "updater"],
   "main": "index.js",
   "type": "module",
   "scripts": {
