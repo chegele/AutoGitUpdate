@@ -39,7 +39,7 @@ npm i auto-git-update
 import AutoGitUpdate from 'auto-git-update';
 
 const config = {
-    repository: 'https://github.com/chegele/BackupPurger'
+    repository: 'https://github.com/chegele/BackupPurger',
     tempLocation: 'C:/Users/scheg/Desktop/tmp/',
     ignoreFiles: ['util/config.js'],
     executeOnComplete: 'C:\\Users\\scheg\\Desktop\\worksapce\\AutoGitUpdate\\startTest.bat',
@@ -60,7 +60,7 @@ npm i auto-git-update@commonjs
 const AutoGitUpdate = require('auto-git-update');
 
 const config = {
-    repository: 'https://github.com/chegele/BackupPurger'
+    repository: 'https://github.com/chegele/BackupPurger',
     tempLocation: 'C:/Users/scheg/Desktop/tmp/',
     ignoreFiles: ['util/config.js'],
     executeOnComplete: 'C:\\Users\\scheg\\Desktop\\worksapce\\AutoGitUpdate\\startTest.bat',
