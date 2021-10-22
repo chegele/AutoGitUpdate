@@ -139,7 +139,7 @@ async function backupApp() {
     let destination = path.join(config.tempLocation, backupSubdirectory);
     log.detail('Auto Git Update - Backing up app to ' + destination);
     await fs.ensureDir(destination);
-    await fs.copy(appRootPath.path, destination);
+    await fs.copy(appRootPath.path, destination, {dereference: true});
     return true;
 }
 
