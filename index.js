@@ -8,16 +8,20 @@ const git = require('simple-git');
 const Logger = require('chegs-simple-logger');
 
 /** 
- * @typedef Config - Configuration for Auto Git Update
- * @param {String} repository - The url to the root of a git repository to update from, or /latest GitHub release. 
- * @param {String} branch - The branch to update from. Defaults to master.
- * @param {Boolean} fromReleases - Updated based off of latest published GitHub release instead of branch package.json.
- * @param {String} token - A personal access token used for accessions private repositories. 
- * @param {String} tempLocation - The local dir to save temporary information for Auto Git Update.
- * @param {Array[String]} ignoreFiles - An array of files to not install when updating. Useful for config files. 
- * @param {String} executeOnComplete - A command to execute after an update completes. Good for restarting the app.
- * @param {Boolean} exitOnComplete - Use process exit to stop the app after a successful update.
- */let config = {}
+ * @typedef {Object} Config - Configuration for Auto Git Update
+ * @property {String} repository - The url to the root of a git repository to update from, or /latest GitHub release. 
+ * @property {String} branch - The branch to update from. Defaults to master.
+ * @property {Boolean} fromReleases - Updated based off of latest published GitHub release instead of branch package.json.
+ * @property {String} token - A personal access token used for accessions private repositories. 
+ * @property {Logger.Options} logConfig - An object with the logging configuration, see https://github.com/chegele/Logger
+ * @property {String} tempLocation - The local dir to save temporary information for Auto Git Update.
+ * @property {Array[String]} ignoreFiles - An array of files to not install when updating. Useful for config files. 
+ * @property {String} executeOnComplete - A command to execute after an update completes. Good for restarting the app.
+ * @property {Boolean} exitOnComplete - Use process exit to stop the app after a successful update.
+ */
+
+/** @type {Config} */
+let config = {}
 
 // Subdirectories to use within the configured tempLocation from above. 
 const cloneSubdirectory = '/AutoGitUpdate/repo/';
@@ -49,6 +53,9 @@ module.exports = class AutoGitUpdate {
         if (updateConfig.repository == undefined) throw new Error('You must include a repository link.');
         if (updateConfig.branch == undefined) updateConfig.branch = 'master';
         if (updateConfig.tempLocation == undefined) throw new Error('You must define a temp location for cloning the repository');
+
+        // Update the logger configuration if provided.
+        if (updateConfig.logConfig) this.setLogConfig(updateConfig.logConfig);
 
         // Update config and retrieve current tag if configured to use releases
         config = updateConfig;
