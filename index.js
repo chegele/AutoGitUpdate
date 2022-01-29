@@ -8,22 +8,27 @@ const git = require('simple-git');
 const Logger = require('chegs-simple-logger');
 
 /** 
- * @typedef Config - Configuration for Auto Git Update
- * @param {String} repository - The url to the root of a git repository to update from. 
- * @param {String} branch - The branch to update from. Defaults to master.
- * @param {String} token - A personal access token used for accessions private repositories. 
- * @param {String} tempLocation - The local dir to save temporary information for Auto Git Update.
- * @param {Array[String]} ignoreFiles - An array of files to not install when updating. Useful for config files. 
- * @param {String} executeOnComplete - A command to execute after an update completes. Good for restarting the app.
- * @param {Boolean} exitOnComplete - Use process exit to stop the app after a successful update.
- */let config = {}
+ * @typedef {Object} Config - Configuration for Auto Git Update
+ * @property {String} repository - The url to the root of a git repository to update from, or /latest GitHub release. 
+ * @property {String} branch - The branch to update from. Defaults to master.
+ * @property {Boolean} fromReleases - Updated based off of latest published GitHub release instead of branch package.json.
+ * @property {String} token - A personal access token used for accessions private repositories. 
+ * @property {Logger.Options} logConfig - An object with the logging configuration, see https://github.com/chegele/Logger
+ * @property {String} tempLocation - The local dir to save temporary information for Auto Git Update.
+ * @property {Array[String]} ignoreFiles - An array of files to not install when updating. Useful for config files. 
+ * @property {String} executeOnComplete - A command to execute after an update completes. Good for restarting the app.
+ * @property {Boolean} exitOnComplete - Use process exit to stop the app after a successful update.
+ */
+
+/** @type {Config} */
+let config = {}
 
 // Subdirectories to use within the configured tempLocation from above. 
 const cloneSubdirectory = '/AutoGitUpdate/repo/';
 const backupSubdirectory = '/AutoGitUpdate/backup/';
 
 // Enable during testing to prevent overwrite of Auto Git Update
-const testing = false;
+const testing = true;
 
 // Create a new simple logger. This can be updated to use a new configuration by calling setLogConfig()
 // https://github.com/chegele/Logger
@@ -33,6 +38,9 @@ log.logWarning = true;
 log.logError   = true;
 log.logDetail  = false;
 log.logDebug   = false;
+
+// Toggles if performing async setup task
+let ready = true;
 
 module.exports = class AutoGitUpdate {
     /**
@@ -46,6 +54,16 @@ module.exports = class AutoGitUpdate {
         if (updateConfig.branch == undefined) updateConfig.branch = 'master';
         if (updateConfig.tempLocation == undefined) throw new Error('You must define a temp location for cloning the repository');
 
+        // Update the logger configuration if provided.
+        if (updateConfig.logConfig) this.setLogConfig(updateConfig.logConfig);
+
+        // Update config and retrieve current tag if configured to use releases
+        config = updateConfig;
+        if (config.fromReleases) {
+            ready = false;
+            setBranchToReleaseTag(config.repository);
+        }
+
         // Validate that Auto Git Update is being used as a dependency or testing is enabled
         // This is to prevent the Auto Git Update module from being overwritten on accident during development
         if (!testing) {
@@ -55,13 +73,13 @@ module.exports = class AutoGitUpdate {
             if (appPackage.name == 'auto-git-update') throw new Error('Auto Git Update is not being ran as a dependency & testing is not enabled.');
         }
 
-        config = updateConfig;
     }
 
     /**
      * Checks local version against the remote version & then updates if different. 
      */
     async autoUpdate() {
+        while (!ready) { await sleep(1000); log.general('Auto Git Update - Not ready to update...')};
         let versionCheck = await this.compareVersions();
         if (versionCheck.upToDate) return true;
         return await this.forceUpdate();
@@ -253,6 +271,35 @@ async function readRemoteVersion() {
     }
 }
 
+
+/**
+ * Updates the configuration for this updater to use the latest release as the repo branch
+ * @param {String} repository - The link to the repo 
+ */
+async function setBranchToReleaseTag(repository) {
+    // Validate the configuration & generate request details
+    let options = {headers: {"User-Agent": "Auto-Git-Update - " + repository}}
+    if (config.token) options.headers.Authorization = `token ${config.token}`;
+    repository = repository.toLocaleLowerCase().replace('github.com/', 'api.github.com/repos/');
+    if (!repository.includes('github')) throw new Error('fromReleases is enabled but this does not seem to be a GitHub repo.');
+    if (repository.endsWith('/')) repository = repository.slice(0, -1);
+    const url = (repository + '/releases/latest')
+    log.general('Auto Git Update - Checking release tag from ' + url);
+
+    // Attempt to identify the tag/version of the latest release
+    try {
+        let body = await promiseHttpsRequest(url, options);
+        let response = JSON.parse(body);
+        let tag = response.tag_name;
+        config.branch = tag;
+        ready = true;
+    }catch(err) {
+        if (err = 404) throw new Error('This repository requires a token or does not exist. \n ' + url);
+        throw err;
+    }
+}
+
+
 ////////////////////////////
 // HELPER & MISC FUNCTIONS 
 
@@ -304,4 +351,10 @@ function promiseHttpsRequest(url, options) {
         req.on('error', reject);
         req.end();
     }); 
+}
+
+async function sleep(time) {
+    return new Promise(function(resolve, reject) {
+        setTimeout(resolve, time);
+    });
 }
