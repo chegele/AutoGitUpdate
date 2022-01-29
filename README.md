@@ -16,11 +16,13 @@ a node.js module used for automatically updating projects from a git repository.
 ### Config Options
  - **repository** *String* - The url to the root of a git repository to update from.
  - **tempLocation** *String* - The local dir to save temporary information for Auto Git Update.
+ - **fromReleases** *Boolean* - [optional] Updated based off of latest published GitHub release instead of branch package.json.
  - **branch** *String* - [optional] The branch to update from. Defaults to master.
  - **token** *String* - [optional] A personal access token used for accessions private repositories. 
  - **ignoreFiles** *Array[String]* - [optional] An array of files to not install when updating. Useful for config files. 
  - **executeOnComplete** *String* - [optional] A command to execute after an update completes. Good for restarting the app.
  - **exitOnComplete** *Boolean* - [optional] Use process exit to stop the app after a successful update.
+ - **logConfig** *Object* - [optional] An object with the logging configuration, see https://github.com/chegele/Logger
 <br><br>
 
 ### Functions
@@ -40,9 +42,10 @@ import AutoGitUpdate from 'auto-git-update';
 
 const config = {
     repository: 'https://github.com/chegele/BackupPurger',
+    fromReleases: true,
     tempLocation: 'C:/Users/scheg/Desktop/tmp/',
     ignoreFiles: ['util/config.js'],
-    executeOnComplete: 'C:\\Users\\scheg\\Desktop\\worksapce\\AutoGitUpdate\\startTest.bat',
+    executeOnComplete: 'C:/Users/scheg/Desktop/worksapce/AutoGitUpdate/startTest.bat',
     exitOnComplete: true
 }
 
@@ -61,9 +64,10 @@ const AutoGitUpdate = require('auto-git-update');
 
 const config = {
     repository: 'https://github.com/chegele/BackupPurger',
+    fromReleases: true,
     tempLocation: 'C:/Users/scheg/Desktop/tmp/',
     ignoreFiles: ['util/config.js'],
-    executeOnComplete: 'C:\\Users\\scheg\\Desktop\\worksapce\\AutoGitUpdate\\startTest.bat',
+    executeOnComplete: 'C:/Users/scheg/Desktop/worksapce/AutoGitUpdate/startTest.bat',
     exitOnComplete: true
 }
 
