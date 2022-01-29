@@ -4,3 +4,4 @@ startTest.bat
 node_modules/
 testing/
 tmp/
+.vscode
