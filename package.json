@@ -1,6 +1,6 @@
 {
   "name": "auto-git-update",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Update node app from git repo.",
   "main": "index.js",
   "scripts": {
