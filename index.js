@@ -28,7 +28,7 @@ const cloneSubdirectory = '/AutoGitUpdate/repo/';
 const backupSubdirectory = '/AutoGitUpdate/backup/';
 
 // Enable during testing to prevent overwrite of Auto Git Update
-const testing = true;
+const testing = false;
 
 // Create a new simple logger. This can be updated to use a new configuration by calling setLogConfig()
 // https://github.com/chegele/Logger
