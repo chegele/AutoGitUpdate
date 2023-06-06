@@ -9,6 +9,7 @@ import Logger from 'chegs-simple-logger';
 
 /** 
  * @typedef {Object} Config - Configuration for Auto Git Update
+ * @property {String} destination - The path to the destination root directory. Defaults to the root of the application.
  * @property {String} repository - The url to the root of a git repository to update from, or /latest GitHub release. 
  * @property {String} branch - The branch to update from. Defaults to master.
  * @property {Boolean} fromReleases - Updated based off of latest published GitHub release instead of branch package.json.
@@ -53,6 +54,7 @@ export default class AutoGitUpdate {
         if (updateConfig.repository == undefined) throw new Error('You must include a repository link.');
         if (updateConfig.branch == undefined) updateConfig.branch = 'master';
         if (updateConfig.tempLocation == undefined) throw new Error('You must define a temp location for cloning the repository');
+        if (updateConfig.destination == undefined) updateConfig.destination = appRootPath.path;
         
         // Update the logger configuration if provided.
         if (updateConfig.logConfig) this.setLogConfig(updateConfig.logConfig);
@@ -157,7 +159,7 @@ async function backupApp() {
     let destination = path.join(config.tempLocation, backupSubdirectory);
     log.detail('Auto Git Update - Backing up app to ' + destination);
     await fs.ensureDir(destination);
-    await fs.copy(appRootPath.path, destination, {dereference: true});
+    await fs.copy(config.destination, destination, {dereference: true});
     return true;
 }
 
@@ -189,7 +191,7 @@ async function downloadUpdate() {
 function installDependencies() {
     return new Promise(function(resolve, reject) {
         //If testing is enabled, use alternative path to prevent overwrite of app. 
-        let destination = testing ? path.join(appRootPath.path, '/testing/'): appRootPath.path;
+        let destination = testing ? path.join(config.destination, '/testing/'): config.destination;
         log.detail('Auto Git Update - Installing application dependencies in ' + destination);
         // Generate and execute command
         let command = `cd ${destination} && npm install`;
@@ -230,7 +232,7 @@ async function installUpdate() {
     // Install updated files
     let source = path.join(config.tempLocation, cloneSubdirectory);
     //If testing is enabled, use alternative path to prevent overwrite of app. 
-    let destination = testing ? path.join(appRootPath.path, '/testing/'): appRootPath.path;
+    let destination = testing ? path.join(config.destination, '/testing/'): config.destination;
     log.detail('Auto Git Update - Installing update...');
     log.detail('Auto Git Update - Source: ' + source);
     log.detail('Auto Git Update - Destination: ' + destination);
@@ -243,7 +245,7 @@ async function installUpdate() {
  * Reads the applications version from the package.json file.
  */
 function readAppVersion() {
-    let file = path.join(appRootPath.path, 'package.json');
+    let file = path.join(config.destination, 'package.json');
     log.detail('Auto Git Update - Reading app version from ' + file);
     let appPackage = fs.readFileSync(file);
     return JSON.parse(appPackage).version;
